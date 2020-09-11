@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <limits>
+#include <iostream>
 
 template <class container>
 bool	container_cmp_equal(container &a, container &b)
