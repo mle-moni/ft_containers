@@ -2,80 +2,10 @@
 #define LISTp_H
 
 #include "shared_functions.hpp"
+#include "list_iterator.hpp"
 
 namespace ft
 {
-	template <typename T>
-	class list;
-
-	template <typename T>
-	class _list_iterator {
-		template<typename> friend class list;
-		private:
-			typedef typename list<T>::Elem			Elem;
-		public:
-			typedef T								value_type;
-			typedef T								&reference;
-			typedef T								*pointer;
-			typedef std::ptrdiff_t					difference_type;
-			typedef std::bidirectional_iterator_tag	iterator_category;
-			
-			_list_iterator(): ptr(nullptr) {}
-			_list_iterator(const _list_iterator<T> &copy): ptr(copy.ptr) {}
-			~_list_iterator() {}
-
-			_list_iterator<T> &operator=(const _list_iterator<T> &other)
-			{
-				ptr = other.ptr;
-				return (*this);
-			}
-
-			reference       operator*() const
-			{
-				return (ptr->data);
-			}
-			pointer         operator->()
-			{
-				return (&(ptr->data));
-			}
-			const pointer   operator->() const
-			{
-				return (&(ptr->data));
-			}
-			_list_iterator<T>	&operator++()
-			{
-				ptr = ptr->next;
-				return (*this);
-			}
-			_list_iterator<T>	&operator--()
-			{
-				ptr = ptr->prev;
-				return (*this);
-			}
-			_list_iterator<T>  operator++(int)
-			{
-				_list_iterator<T> tmp(*this);
-				ptr = ptr->next;
-				return (tmp);
-			}
-			_list_iterator<T>  operator--(int)
-			{
-				_list_iterator<T> tmp(*this);
-				ptr = ptr->prev;
-				return (tmp);
-			}
-			bool operator!=(const _list_iterator<T> &r) const
-			{
-				return (ptr != r.ptr);
-			}
-			bool operator==(const _list_iterator<T> &r) const
-			{
-				return (ptr == r.ptr);
-			}
-		private:
-			_list_iterator(Elem *elem): ptr(elem) {}
-			Elem	*ptr;
-	};
 	template <typename T>
 	class list {
 		template<typename> friend class _list_iterator;
@@ -105,6 +35,7 @@ namespace ft
 			size_type		_length;
 			Elem			*_first;
 			Elem			*_last;
+			
 			void			_create_last_elem(void)
 			{
 				Elem	*last_elem = new Elem();
@@ -522,9 +453,9 @@ namespace ft
 			}
 			void swap (list& x)
 			{
-				_swap(this->_first, x._first);
-				_swap(this->_last, x._last);
-				_swap(this->_length, x._length);
+				_swap(_first, x._first);
+				_swap(_last, x._last);
+				_swap(_length, x._length);
 			}
 			void resize (size_type n, value_type val = value_type())
 			{
