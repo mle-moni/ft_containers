@@ -20,9 +20,9 @@ namespace ft
 			typedef size_t				size_type;
 			// Iterator types
 			typedef _list_iterator<T>					iterator;
-			typedef std::reverse_iterator<iterator>	reverse_iterator;
+			typedef ft::reverse_iterator<iterator>	reverse_iterator;
 			typedef _list_iterator<T>							const_iterator;
-			typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+			typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 		private:
 			struct Elem {

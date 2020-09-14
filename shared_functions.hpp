@@ -107,66 +107,136 @@ bool	container_cmp_more_eq(container &a, container &b)
 	return (true);
 }
 
-// namespace ft
-// {
-// 	template<typename IteratorType>
-// 	class reverse_iterator: public IteratorType
-// 	{
-// 		public:
-// 			typedef IteratorType::value_type		value_type;
-// 			typedef IteratorType::reference			reference;
-// 			typedef IteratorType::pointer			pointer;
-// 			typedef IteratorType::difference_type	difference_type;
-// 		public:
-// 			reverse_iterator(): IteratorType()
-// 			{}
-// 			reverse_iterator(reverse_iterator const &other): IteratorType(other)
-// 			{}
-// 			reverse_iterator(IteratorType const &iterator): IteratorType(iterator)
-// 			{}
-// 			reverse_iterator	&operator=(reverse_iterator const &other)
-// 			{
-// 				*this = IteratorType::operator=(other);
-// 				return (*this);
-// 			}
+namespace ft
+{
+	template<typename IteratorType>
+	class reverse_iterator
+	{
+		public:
+			typedef typename IteratorType::value_type		value_type;
+			typedef typename IteratorType::reference			reference;
+			typedef typename IteratorType::const_reference	const_reference;
+			typedef typename IteratorType::pointer			pointer;
+			typedef typename IteratorType::const_pointer		const_pointer;
+			typedef typename IteratorType::difference_type	difference_type;
+			typedef typename IteratorType::iterator_category	iterator_category;
+		private:
+			IteratorType	_ite;
+		public:
+			reverse_iterator(): _ite(IteratorType())
+			{}
+			reverse_iterator(IteratorType const &iterator): _ite(iterator)
+			{}
+			reverse_iterator(reverse_iterator const &other): _ite(other._ite)
+			{}
+			reverse_iterator	&operator=(reverse_iterator const &other)
+			{
+				_ite = other._ite;
+				return (*this);
+			}
 
-// 			reverse_iterator	operator++(int) {
-// 				reverse_iterator	tmp(*this);
-// 				operator++();
-// 				return (tmp);
-// 			}
-// 			IteratorType		&operator++() {
-// 				return (this->IteratorType::operator--());
-// 			}
-// 			reverse_iterator operator--(int) {
-// 				reverse_iterator tmp(*this);
-// 				operator--();
-// 				return (tmp);
-// 			}
-// 			IteratorType &operator--() {
-// 				return (this->IteratorType::operator++());
-// 			}
+			reverse_iterator	operator++(int) {
+				reverse_iterator	tmp(*this);
+				_ite--;
+				return (tmp);
+			}
+			reverse_iterator	&operator++() {
+				--_ite;
+				return (*this);
+			}
+			reverse_iterator operator--(int) {
+				reverse_iterator	tmp(*this);
+				_ite++;
+				return (tmp);
+			}
+			reverse_iterator	&operator--() {
+				++_ite;
+				return (*this);
+			}
+			reference operator*()
+			{
+				IteratorType	tmp(_ite);
+				--tmp;
+				return (*tmp);
+			}
+			const_reference operator*() const
+			{
+				IteratorType	tmp(_ite);
+				--tmp;
+				return (*tmp);
+			}
+			reference		operator[](int index_diff)
+			{
+				return (_ite[index_diff]);
+			}
+			const_reference	operator[](int index_diff) const
+			{
+				return (_ite[index_diff]);
+			}
+			pointer operator->() {
+				IteratorType	tmp(_ite);
+				--tmp;
+				return (&(*tmp));
+			}
+			const_pointer operator->() const {
+				IteratorType	tmp(_ite);
+				--tmp;
+				return (&(*tmp));
+			}
 
-// 			reference operator*()
-// 			{
-// 				IteratorType	tmp(*this);
-// 				--tmp;
-// 				return (*tmp);
-// 			}
-// 			const_reference operator*() const
-// 			{
-// 				IteratorType tmp(*this);
-// 				return (*--tmp);
-// 			}
-// 			pointer operator->() {
-// 				IteratorType tmp(*this);
-// 				return (&*--tmp);
-// 			}
-// 			const_pointer operator->() const {
-// 				IteratorType tmp(*this);
-// 				return (&*--tmp);
-// 			}
-// 	};
-// }
+			reverse_iterator	&operator-=(int index_diff)
+			{
+				_ite -= index_diff;
+				return (*this);
+			}
+			reverse_iterator	&operator+=(int index_diff)
+			{
+				_ite += index_diff;
+				return (*this);
+			}
+
+			reverse_iterator	operator-(int index_diff) const
+			{
+				reverse_iterator	tmp(*this);
+				tmp._ite -= index_diff;
+				return (tmp);
+			}
+			reverse_iterator	operator+(int index_diff) const
+			{
+				reverse_iterator	tmp(*this);
+				tmp._ite += index_diff;
+				return (tmp);
+			}
+			difference_type		operator-(reverse_iterator const& other) const
+			{
+				return (_ite - other._ite);
+			}
+			
+			bool				operator==(const reverse_iterator &other) const
+			{
+				return (_ite == other._ite);
+			}
+			bool				operator!=(const reverse_iterator &other) const
+			{
+				return (_ite != other._ite);
+			}
+			bool				operator<(const reverse_iterator &other) const
+			{
+				return (_ite <  other._ite);
+			}
+			bool				operator>(const reverse_iterator &other) const
+			{
+				return (_ite >  other._ite);
+			}
+			bool				operator<=(const reverse_iterator &other) const
+			{
+				return (_ite <= other._ite);
+			}
+			bool				operator>=(const reverse_iterator &other) const
+			{
+				return (_ite >= other._ite);
+			}
+	};
+}
 
 #endif

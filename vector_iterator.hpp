@@ -93,13 +93,13 @@ namespace ft
 
 			_vector_iterator	operator-(int index_diff) const
 			{
-				_vector_iterator r(*this);
-				return r -= index_diff;
+				_vector_iterator	tmp(*this);
+				return (tmp -= index_diff);
 			}
 			_vector_iterator	operator+(int index_diff) const
 			{
-				_vector_iterator r(*this);
-				return r += index_diff;
+				_vector_iterator	tmp(*this);
+				return (tmp += index_diff);
 			}
 			difference_type		operator-(_vector_iterator const& other) const
 			{
