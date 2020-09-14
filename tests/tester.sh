@@ -10,6 +10,7 @@ fi
 ERROR="0"
 
 function compilation_and_run {
+	tty -s && tput sc # save context
 
 	myfile="${1}/our.log"
 	hisfile="${1}/his.log"
@@ -41,6 +42,7 @@ function compilation_and_run {
 		./a.out >> $hisfile
 	done
 
+	tty -s && tput rc && tput ed # restore context
 	rm -f a.out $compil_out
 	diff $myfile $hisfile > $difflog
 	return $?
@@ -58,7 +60,7 @@ function run_from_here {
 	if [[ $? != "0" ]]
 	then
 		ERROR="1"
-		echo -n "❌ ${RED} "
+		echo -n "${RED} ❌ "
 		echo $directory | sed "s/tests\///g"
 		echo -n $NORMAL
 		echo "${BLUE}Additionnal logs:"
@@ -67,7 +69,7 @@ function run_from_here {
 			echo "${log_file}"
 		done
 	else
-		echo -n "✅  ${GREEN}"
+		echo -n "${GREEN} ✅ "
 		echo $directory | sed "s/tests\///g"
 		echo -n $NORMAL
 	fi
@@ -76,7 +78,7 @@ function run_from_here {
 stat .git 2> /dev/null > /dev/null
 if [[ $? != "0" ]]
 then
-	echo "❌ ${RED} Vous devez appeller ce script a la racine de votre projet${NORMAL}"
+	echo " ❌ ${RED} Vous devez appeller ce script a la racine de votre projet${NORMAL}"
 	exit 1
 fi
 

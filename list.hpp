@@ -1,5 +1,5 @@
-#ifndef LISTp_H
-#define LISTp_H
+#ifndef LIST_H
+#define LIST_H
 
 #include "shared_functions.hpp"
 #include "list_iterator.hpp"
