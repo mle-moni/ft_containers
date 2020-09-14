@@ -10,8 +10,8 @@ namespace ft
 	{
 		template<typename> friend class vector;
 		private:
-			vector<T>*  _vector;
-			size_t      _index;
+			vector<T>	*_vector;
+			size_t		_index;
 			_vector_iterator(vector<T> *vector, size_t index): _vector(vector), _index(index) {}
 		public:
 			typedef T								value_type;

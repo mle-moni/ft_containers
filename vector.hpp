@@ -23,9 +23,9 @@ namespace ft
 			typedef _vector_iterator<T>						const_iterator;
 			typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 		private:
+			value_type		*_arr;
 			size_type		_length;
 			size_type		_capacity;
-			value_type		*_arr;
 
 			template<typename A>
 			void	_swap(A& ref1, A& ref2) {
@@ -33,12 +33,39 @@ namespace ft
 				ref1 = ref2;
 				ref2 = tmp;
 			}
+			void	_move_elems(size_type dest, size_type src, size_type len)
+			{
+				size_type	dest_index;
+				size_type	src_index = 0;
+				if (src < dest)
+				{
+					dest_index = dest + len - 1;
+					while (src_index < len)
+					{
+						_arr[dest_index] = _arr[src + (len - 1) - src_index];
+						--dest_index;
+						++src_index;
+					}
+				}
+				else
+				{
+					dest_index = dest;
+					while (src_index < len)
+					{
+						_arr[dest_index] = _arr[src_index + src];
+						++dest_index;
+						++src_index;
+					}
+				}
+			}
 		public:
 			// constructors
 			vector (): _arr(nullptr), _length(0), _capacity(0) {}
-			vector (size_type n, const value_type& val = value_type()): _arr(nullptr), _length(n), _capacity(n)
+			vector (size_type n, const value_type& val = value_type()): _arr(nullptr), _length(0), _capacity(0)
 			{
-				_arr = (pointer)::operator new(sizeof(value_type) * n);
+				_length = n;
+				_capacity = n;
+				_arr = new value_type[n];
 				for (size_type i = 0; i < n; i++) {
 					_arr[i] = value_type(val);
 				}
@@ -56,7 +83,7 @@ namespace ft
 				}
 				_length = size_of_vector;
 				_capacity = size_of_vector;
-				_arr = (pointer)::operator new(sizeof(value_type) * size_of_vector);
+				_arr = new value_type[size_of_vector];
 				while (first != last) {
 					_arr[index] = value_type(*first);
 					++index;
@@ -65,8 +92,10 @@ namespace ft
 			}
 			vector (const vector& x): _arr(nullptr), _length(x._length), _capacity(x._capacity)
 			{
-				_arr = (pointer)::operator new(sizeof(value_type) * _capacity);
-				std::memcpy((void*)(_arr), (void*)(x._arr), x._length * sizeof(value_type));
+				_arr = new value_type[_capacity];
+				for (size_type i = 0; i < x._length; i++) {
+					_arr[i] = value_type(x._arr[i]);
+				}
 			}
 
 			// destructor
@@ -74,20 +103,19 @@ namespace ft
 			{
 				clear();
 				if (_arr)
-					::operator delete(_arr);
+					delete [] _arr;
 			}
 
 			// operator=
 			vector& operator= (const vector& x)
 			{
 				clear();
-				if (_arr)
-					::operator delete(_arr);
-				_arr = nullptr;
+				reserve(x._capacity);
 				_length = x._length;
-				_capacity = x._capacity;
-				_arr = (pointer)::operator new(sizeof(value_type) * _capacity);
-				std::memcpy((void*)(_arr), (void*)(x._arr), x._length * sizeof(value_type));
+				for (size_type i = 0; i < x._length; i++) {
+					_arr[i] = value_type(x._arr[i]);
+				}
+				return (*this);
 			}
 
 			// iterators
@@ -147,10 +175,12 @@ namespace ft
 				}
 				else
 				{
-					size_type	i = _length;
-					while (i > n)
+					size_type	i = _length - 1;
+					while (i >= n)
 					{
 						_arr[i].value_type::~value_type();
+						if (i == n)
+							break ; // prevent overflow
 						--i;
 					}
 				}
@@ -170,12 +200,14 @@ namespace ft
 				if (n <= _capacity || n == 0)
 					return ;
 				old_arr = _arr;
-				if (n == _capacity + 1)
+				if (_capacity && n == _capacity + 1)
 					n = _capacity * 2;
-				_arr = ::operator new(sizeof(value_type) * n);
+				_arr = new value_type[n];
 				_capacity = n;
-				std::memcpy((void*)(_arr), (void*)(old_arr), _length * sizeof(value_type));
-				::operator delete(old_arr);
+				for (size_type i = 0; i < _length; i++) {
+					_arr[i] = value_type(old_arr[i]);
+				}
+				delete [] old_arr;
 				old_arr = nullptr;
 			}
 
@@ -262,14 +294,12 @@ namespace ft
 			iterator insert (iterator position, const value_type& val)
 			{
 				reserve(_length + 1);
-				size_type	val_size = sizeof(value_type);
-				pointer		pos = _arr + (position._index * val_size);
-				size_type	number_of_bytes = (_length - position._index) * val_size;
-				if (number_of_bytes)
-					std::memmove(pos + val_size, pos, number_of_bytes);
-				_arr[position._index - 1] = value_type(val);
+				size_type	number_of_elems = _length - position._index;
+				if (number_of_elems)
+					_move_elems(position._index + 1, position._index, number_of_elems);
+				_arr[position._index] = value_type(val);
 				++_length;
-				return (iterator(this, position._index - 1));
+				return (position);
 			}
 			void insert (iterator position, size_type n, const value_type& val)
 			{
@@ -296,11 +326,10 @@ namespace ft
 			{
 				if (empty())
 					return (position);
-				size_type	val_size = sizeof(value_type);
-				pointer		pos = _arr + ((position._index + 1) * val_size);
-				size_type	number_of_bytes = (_length - (position._index + 1)) * val_size;
-				if (number_of_bytes)
-					std::memmove(pos, pos + val_size, number_of_bytes);
+				_arr[position._index].value_type::~value_type();
+				size_type	number_of_elems = _length - (position._index + 1);
+				if (number_of_elems)
+					_move_elems(position._index, position._index + 1, number_of_elems);
 				--_length;
 				return (position);
 			}
@@ -308,13 +337,13 @@ namespace ft
 			{
 				if (empty())
 					return (last);
-				size_type	val_size = sizeof(value_type);
 				size_type	number_to_del = last._index - first._index;
-
-				pointer		pos = _arr + ((first._index + number_to_del) * val_size);
-				size_type	number_of_bytes = (_length - (first._index + number_to_del)) * val_size;
-				if (number_of_bytes)
-					std::memmove(pos - (number_to_del * val_size), pos, number_of_bytes);
+				size_type	elems_to_move = _length - last._index;
+				for (size_type i = first._index; i < last._index; i++) {
+					_arr[i].value_type::~value_type();
+				}
+				if (elems_to_move)
+					_move_elems(first._index, last._index, elems_to_move);
 				_length -= number_to_del;
 				return (first);
 			}
@@ -341,9 +370,11 @@ namespace ft
 	template <class T>
   	bool operator== (const vector<T>& lhs, const vector<T>& rhs)
 	{
+		ft::vector<T>	cpy_l(lhs);
+		ft::vector<T>	cpy_r(rhs);
 		if (lhs.size() != rhs.size())
 			return (false);
-		return (container_cmp_equal(lhs, rhs));
+		return (container_cmp_equal(cpy_l, cpy_r));
 	}
 	template <class T>
 	bool operator!= (const vector<T>& lhs, const vector<T>& rhs)
@@ -353,22 +384,30 @@ namespace ft
 	template <class T>
 	bool operator<  (const vector<T>& lhs, const vector<T>& rhs)
 	{
-		return (container_cmp_less(lhs, rhs));
+		ft::vector<T>	cpy_l(lhs);
+		ft::vector<T>	cpy_r(rhs);
+		return (container_cmp_less(cpy_l, cpy_r));
 	}
 	template <class T>
 	bool operator<= (const vector<T>& lhs, const vector<T>& rhs)
 	{
-		return (container_cmp_less_eq(lhs, rhs));
+		ft::vector<T>	cpy_l(lhs);
+		ft::vector<T>	cpy_r(rhs);
+		return (container_cmp_less_eq(cpy_l, cpy_r));
 	}
 	template <class T>
 	bool operator>  (const vector<T>& lhs, const vector<T>& rhs)
 	{
-		return (container_cmp_more(lhs, rhs));
+		ft::vector<T>	cpy_l(lhs);
+		ft::vector<T>	cpy_r(rhs);
+		return (container_cmp_more(cpy_l, cpy_r));
 	}
 	template <class T>
 	bool operator>= (const vector<T>& lhs, const vector<T>& rhs)
 	{
-		return (container_cmp_more_eq(lhs, rhs));
+		ft::vector<T>	cpy_l(lhs);
+		ft::vector<T>	cpy_r(rhs);
+		return (container_cmp_more_eq(cpy_l, cpy_r));
 	}
 	template <class T>
 	void swap (vector<T>& x, vector<T>& y)
