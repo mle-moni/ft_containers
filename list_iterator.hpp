@@ -1,3 +1,6 @@
+#ifndef LIST_ITERATOR_H
+#define LIST_ITERATOR_H
+
 #include "shared_functions.hpp"
 
 namespace ft
@@ -80,3 +83,5 @@ namespace ft
 			Elem	*ptr;
 	};	
 }
+
+#endif

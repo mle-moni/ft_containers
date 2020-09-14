@@ -1,3 +1,6 @@
+#ifndef VECTOR_ITERATOR_H
+#define VECTOR_ITERATOR_H
+
 #include "shared_functions.hpp"
 
 namespace ft
@@ -133,4 +136,4 @@ namespace ft
 	};
 }
 
-
+#endif
