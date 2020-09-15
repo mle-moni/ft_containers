@@ -223,6 +223,7 @@ namespace ft
 				{
 					Elem	*new_el = new Elem();
 					new_el->data = value_type(current->data);
+					new_el->is_last = current->is_last;
 					if (current == x._first) {
 						_first = new_el;
 					} else {
