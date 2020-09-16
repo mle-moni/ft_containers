@@ -3,3 +3,6 @@ settings.json
 a.out
 vgcore.*
 *.log
+*.dot
+*.png
+*.gvpr
