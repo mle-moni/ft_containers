@@ -137,40 +137,47 @@ int		main(void)
 	std::list<int> int_ordered2({-20, 2, 3, 5, 51, 88});
 	std::list<int> int_ordered3({44});
 
-	str_ordered.merge(str_ordered2);
-	str_ordered.merge(str_ordered3);
+	std::list<std::string>	str_ordered_list(str_ordered.begin(), str_ordered.end());
+	std::list<std::string>	str_ordered_list2(str_ordered2.begin(), str_ordered2.end());
+	std::list<std::string>	str_ordered_list3(str_ordered3.begin(), str_ordered3.end());
+	std::list<int>			int_ordered_list(int_ordered.begin(), int_ordered.end());
+	std::list<int>			int_ordered_list2(int_ordered2.begin(), int_ordered2.end());
+	std::list<int>			int_ordered_list3(int_ordered3.begin(), int_ordered3.end());
 
-	int_ordered.merge(int_ordered2, my_comp);
-	int_ordered.merge(int_ordered3, my_comp);
-	print_list(str_ordered);
-	print_list(str_ordered2);
-	print_list(str_ordered3);
-	print_list(int_ordered);
-	print_list(int_ordered2);
-	print_list(int_ordered3);
+	str_ordered_list.merge(str_ordered_list2);
+	str_ordered_list.merge(str_ordered_list3);
+
+	int_ordered_list.merge(int_ordered_list2, my_comp);
+	int_ordered_list.merge(int_ordered_list3, my_comp);
+	print_list(str_ordered_list);
+	print_list(str_ordered_list2);
+	print_list(str_ordered_list3);
+	print_list(int_ordered_list);
+	print_list(int_ordered_list2);
+	print_list(int_ordered_list3);
 
 	std::cout << "reverse\n";
 
-	str_ordered.reverse();
-	int_ordered.reverse();
-	int_ordered.reverse();
-	int_ordered3.reverse();
-	print_list(int_ordered3);
-	print_list(str_ordered);
-	print_list(int_ordered);
-	int_ordered.reverse();
-	print_list(int_ordered);
+	str_ordered_list.reverse();
+	int_ordered_list.reverse();
+	int_ordered_list.reverse();
+	int_ordered_list3.reverse();
+	print_list(int_ordered_list3);
+	print_list(str_ordered_list);
+	print_list(int_ordered_list);
+	int_ordered_list.reverse();
+	print_list(int_ordered_list);
 
 	std::cout << "sort\n";
 
-	str_ordered.sort();
-	str_ordered.push_back("criquet");
-	str_ordered.sort();
-	int_ordered.sort(my_comp);
-	print_list(str_ordered);
-	print_list(int_ordered);
-	int_ordered.sort(is_more);
-	print_list(int_ordered);
+	str_ordered_list.sort();
+	str_ordered_list.push_back("criquet");
+	str_ordered_list.sort();
+	int_ordered_list.sort(my_comp);
+	print_list(int_ordered_list);
+	print_list(str_ordered_list);
+	int_ordered_list.sort(is_more);
+	print_list(int_ordered_list);
 
 	return (0);
 }

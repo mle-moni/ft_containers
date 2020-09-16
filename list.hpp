@@ -671,7 +671,7 @@ namespace ft
 						++current;
 				}
 				if (changes)
-					sort();
+					sort(comp);
 			}
 			void reverse()
 			{
