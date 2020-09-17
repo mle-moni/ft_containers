@@ -138,7 +138,7 @@ void showTree(const tree_node<Key> *root, std::string file_name = std::string("t
 		else
 		{
 			hash[p] = idx;
-			fprintf(fout, "    Node%d[shape=\"circle\", label=\"%d\"];\n", idx++, p->key);
+			fprintf(fout, "    Node%d[shape=\"circle\", label=\"%d\"];\n", idx++, p->key_val.first);
 			if (p->left || p->right)	// 如果是叶节点，则不需要将两个空节点放入队列
 			{
 				q.push(p->left);
