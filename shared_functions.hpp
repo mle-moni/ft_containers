@@ -242,6 +242,62 @@ namespace ft
 				return (_ite >= other._ite);
 			}
 	};
+
+	template<class T1, class T2>
+	struct pair {
+		typedef	T1	first_type;
+		typedef	T2	second_type;
+
+		first_type	first;
+		second_type	second;
+		
+		pair(): first(), second() {}
+		template<class U, class V>
+		pair (const pair<U, V> &o): first(o.first), second(o.second) {}
+		pair (const first_type &a, const second_type &b): first(a), second(b) {}
+		pair	&operator=(const pair &o)
+		{
+			first = o.first;
+			second = o.second;
+			return (*this);
+		}
+	};
+	template <class type1, class type2>
+	bool operator==(const pair<type1, type2> &lhs, const pair<type1, type2> &rhs)
+	{
+		return (lhs.first == rhs.first && lhs.second == rhs.second);
+	}
+	template <class type1, class type2>
+	bool operator!=(const pair<type1, type2> &lhs, const pair<type1, type2> &rhs)
+	{
+		return (!(lhs == rhs));
+	}
+	template <class type1, class type2>
+	bool operator<(const pair<type1, type2> &lhs, const pair<type1, type2> &rhs)
+	{
+		return (lhs.first < rhs.first || (!(rhs.first < lhs.first) && lhs.second < rhs.second));
+	}
+	template <class type1, class type2>
+	bool operator<=(const pair<type1, type2> &lhs, const pair<type1, type2> &rhs)
+	{
+		return (!(rhs < lhs));
+	}
+	template <class type1, class type2>
+	bool operator>(const pair<type1, type2> &lhs, const pair<type1, type2> &rhs)
+	{
+		return (rhs < lhs);
+	}
+	template <class type1, class type2>
+	bool operator>=(const pair<type1, type2> &lhs, const pair<type1, type2> &rhs)
+	{
+		return (!(lhs < rhs));
+	}
+
+	template <class type1, class type2>
+	pair<type1, type2> make_pair (type1 x, type2 y)
+	{
+		return (pair<type1, type2>(x, y));
+	}
 }
 
 #endif
