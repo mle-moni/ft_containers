@@ -1,38 +1,28 @@
 #ifndef TREE_H
 #define TREE_H
 
-#include <iostream>
-
-#ifndef UNIQUE_KEY
-#define UNIQUE_KEY 1
-#endif
-
-namespace ft
-{
-	template<typename Tp>
-	struct less {
-		bool operator()(const Tp& x, const Tp& y) const
-		{
-			return (x < y);
-		}
-	};
-}
+#include "shared_functions.hpp"
 
 template <class Key, class T = int, class Compare = ft::less<Key> >
 struct tree_node {
 	public:
+		const bool		UNIQUE_KEY;
 		tree_node		*left;
 		tree_node		*right; 
 		tree_node		*parent;
-		std::pair<const Key, T>	key_val;
+		ft::pair<const Key, T>	key_val;
 		bool			is_last;
-		tree_node(): left(nullptr), right(nullptr), parent(nullptr), key_val( std::pair<Key, T>(Key(), T() )), is_last(false) {}
-		tree_node(const Key &p_key, const T &p_value = T())
-		: left(nullptr), right(nullptr), parent(nullptr), key_val(std::pair<Key, T>(p_key, p_value)), is_last(false) {}
+		tree_node(bool keyIsUnique = true)
+		: UNIQUE_KEY(keyIsUnique), left(nullptr), right(nullptr), parent(nullptr),
+		key_val( ft::pair<Key, T>(Key(), T() )), is_last(false) {}
+
+		tree_node(const Key &p_key, const T &p_value, bool keyIsUnique = true)
+		: UNIQUE_KEY(keyIsUnique), left(nullptr), right(nullptr), parent(nullptr),
+		key_val(ft::pair<Key, T>(p_key, p_value)), is_last(false) {}
 		
-		static tree_node	*create_last_elem(void)
+		static tree_node	*create_last_elem(bool keyIsUnique)
 		{
-			tree_node	*last_node = new tree_node;
+			tree_node	*last_node = new tree_node(keyIsUnique);
 			last_node->is_last = true;
 			return (last_node);
 		}
@@ -45,7 +35,7 @@ struct tree_node {
 		static tree_node	*insert(tree_node *root, tree_node *new_el)
 		{
 			Compare	comp;
-			if (UNIQUE_KEY && root && new_el->key_val.first == root->key_val.first)
+			if (root->UNIQUE_KEY && root && new_el->key_val.first == root->key_val.first)
 				return (root);
 			if (root && root->is_last)
 			{
@@ -74,7 +64,7 @@ struct tree_node {
 		static tree_node	*deep_copy(tree_node *root, tree_node *root_parent = nullptr) {
 			if (!root)
 				return (nullptr);
-			tree_node*	new_node = new tree_node(root->key_val.first, root->key_val.second);
+			tree_node*	new_node = new tree_node(root->key_val.first, root->key_val.second, root->UNIQUE_KEY);
 			new_node->parent = root_parent;
 			new_node->is_last = root->is_last;
 			new_node->left = deep_copy(root->left, root);

@@ -6,3 +6,4 @@ vgcore.*
 *.dot
 *.png
 *.gvpr
+my_tests.cpp

@@ -298,6 +298,14 @@ namespace ft
 	{
 		return (pair<type1, type2>(x, y));
 	}
+
+	template<typename Tp>
+	struct less {
+		bool operator()(const Tp& x, const Tp& y) const
+		{
+			return (x < y);
+		}
+	};
 }
 
 #endif

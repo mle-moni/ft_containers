@@ -12,7 +12,7 @@ namespace ft
 		public:
 			typedef	Key				key_type;
 			typedef	T				mapped_type;
-			typedef	std::pair<const Key, T>	value_type;
+			typedef	ft::pair<const Key, T>	value_type;
 			typedef	Compare			key_compare;
 			typedef	Compare			value_compare;
 			typedef	value_type			&reference;

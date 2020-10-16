@@ -1,12 +1,10 @@
 #ifndef MAP_H
 #define MAP_H
 
-#define UNIQUE_KEY 1
-
+#include "shared_functions.hpp"
 #include "tree.hpp"
 #include "debug/tree_visualizer.hpp"
 #include "map_iterator.hpp"
-#include "shared_functions.hpp"
 
 
 namespace ft
@@ -32,7 +30,7 @@ namespace ft
 						return (*this);
 					}
 				public:
-					typedef	std::pair<const Key, T>	value_type;
+					typedef	ft::pair<const Key, T>	value_type;
 					
 					typedef bool result_type;
 					typedef value_type first_argument_type;
@@ -45,7 +43,7 @@ namespace ft
 
 			typedef	Key			key_type;
 			typedef	T			mapped_type;
-			typedef	std::pair<const Key, T>	value_type;
+			typedef	ft::pair<const Key, T>	value_type;
 			typedef	Compare		key_compare;
 			typedef	value_compare_class<Key, T, Compare>	value_compare;
 			typedef	value_type			&reference;
@@ -66,13 +64,13 @@ namespace ft
 			// constructors
 			map (const key_compare& p_comp = key_compare()) : comp(p_comp), _root(nullptr), _size(0)
 			{
-				_root  = _node_type::create_last_elem();
+				_root  = _node_type::create_last_elem(true);
 			}
 			template <class InputIterator>
 			map (InputIterator first, InputIterator last, const key_compare& p_comp = key_compare())
 			: comp(p_comp), _root(nullptr), _size(0)
 			{
-				_root  = _node_type::create_last_elem();
+				_root  = _node_type::create_last_elem(true);
 				while (first != last)
 				{
 					value_type	new_pair(*first);
