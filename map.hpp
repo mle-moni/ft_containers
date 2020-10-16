@@ -73,7 +73,7 @@ namespace ft
 				_root  = _node_type::create_last_elem(true);
 				while (first != last)
 				{
-					value_type	new_pair(*first);
+					value_type	new_pair(first->first, first->second);
 					_node_type	*new_el = new _node_type(new_pair.first, new_pair.second);
 					if (_node_type::insert(_root, new_el) != new_el)
 						delete new_el; // there is already a pair with this Key
@@ -117,6 +117,22 @@ namespace ft
 			{
 				return (const_iterator(_node_type::find_rightmost_node(_root)));
 			}
+			reverse_iterator rbegin()
+			{
+				return (reverse_iterator(end()));
+			}
+			const_reverse_iterator rbegin() const
+			{
+				return (const_reverse_iterator(end()));
+			}
+			reverse_iterator rend()
+			{
+				return (reverse_iterator(begin()));
+			}
+			const_reverse_iterator rend() const
+			{
+				return (const_reverse_iterator(begin()));
+			}
 
 			// capacity
 			bool empty() const
@@ -135,7 +151,7 @@ namespace ft
 			// element acces
 			mapped_type& operator[] (const key_type& k)
 			{
-				_node_type	*new_el = new _node_type(k);
+				_node_type	*new_el = new _node_type(k, mapped_type());
 				_node_type	*elem = _node_type::insert(_root, new_el);
 				if (elem != new_el)
 					delete new_el; // there is already a pair with this Key
@@ -209,13 +225,16 @@ namespace ft
 			}
 			void erase (iterator position)
 			{
-				if (_node_type::remove(position.ptr))
+				int	removedCount = 0;
+				_node_type::remove(position.ptr, &removedCount);
+				if (removedCount)
 					--_size;
 			}
 			size_type erase (const key_type& k)
 			{
-				_node_type	elem_after_del = _node_type::remove(_root, k);
-				if (!elem_after_del)
+				int	removedCount = 0;
+				_node_type::remove(_root, k, &removedCount);
+				if (!removedCount)
 					return (0);
 				--_size;
 				return (1);
@@ -233,7 +252,7 @@ namespace ft
 			void swap (map& x)
 			{
 				size_type	size_tmp = _size;
-				_node_type	root_tmp = _root;
+				_node_type	*root_tmp = _root;
 				_root = x._root;
 				_size = x._size;
 				x._root = root_tmp;
@@ -241,8 +260,11 @@ namespace ft
 			}
 			void clear()
 			{
+				if (_size == 0)
+					return ;
 				_size = 0;
 				_node_type::free_tree(_root);
+				_root = nullptr;
 			}
 
 			// Observers

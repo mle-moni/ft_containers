@@ -131,16 +131,17 @@ struct tree_node {
 			else
 				return (find(root->right, key));
 		}
-		static tree_node	*remove(tree_node *root)
+		static tree_node	*remove(tree_node *root, int *deletedCount)
 		{
-			return (remove(root, root->key_val.first));
+			return (remove(root, root->key_val.first, deletedCount));
 		}
-		static tree_node	*remove(tree_node *root, const Key& key)
+		static tree_node	*remove(tree_node *root, const Key& key, int *deletedCount)
 		{
 			if (!root || root->is_last)
 				return (nullptr);
 			if (root->key_val.first == key)
 			{
+				*deletedCount += 1;
 				tree_node	*node_parent = root->parent;
 				tree_node	*node_left = root->left;
 				tree_node	*node_right = root->right;
@@ -160,9 +161,9 @@ struct tree_node {
 			}
 			Compare comp;
 			if (comp(key, root->key_val.first))
-				return (remove(root->left, key));
+				return (remove(root->left, key, deletedCount));
 			else
-				return (remove(root->right, key));
+				return (remove(root->right, key, deletedCount));
 		}
 	private:
 		static tree_node	*remove_bindings(tree_node *node_parent, tree_node *node_left, tree_node *node_right)

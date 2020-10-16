@@ -255,12 +255,12 @@ namespace ft
 		template<class U, class V>
 		pair (const pair<U, V> &o): first(o.first), second(o.second) {}
 		pair (const first_type &a, const second_type &b): first(a), second(b) {}
-		pair	&operator=(const pair &o)
-		{
-			first = o.first;
-			second = o.second;
-			return (*this);
-		}
+		// pair<T1, T2>	&operator=(const pair &o)
+		// {
+		// 	first = o.first;
+		// 	second = o.second;
+		// 	return (*this);
+		// }
 	};
 	template <class type1, class type2>
 	bool operator==(const pair<type1, type2> &lhs, const pair<type1, type2> &rhs)
