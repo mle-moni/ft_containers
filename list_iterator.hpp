@@ -20,7 +20,7 @@ namespace ft
 			typedef T								*pointer;
 			typedef const T							*const_pointer;
 			typedef std::ptrdiff_t					difference_type;
-			typedef std::bidirectional_iterator_tag	iterator_category;
+			typedef ft::bidirectional_iterator_tag	iterator_category;
 			
 			_list_iterator(): ptr(nullptr) {}
 			_list_iterator(const _list_iterator<T> &copy): ptr(copy.ptr) {}

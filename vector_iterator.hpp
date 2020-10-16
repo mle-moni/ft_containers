@@ -23,7 +23,7 @@ namespace ft
 			typedef T								*pointer;
 			typedef const T							*const_pointer;
 			typedef std::ptrdiff_t					difference_type;
-			typedef std::random_access_iterator_tag	iterator_category;
+			typedef ft::random_access_iterator_tag	iterator_category;
 
 			_vector_iterator(): _vector(nullptr), _index(0) {}
 			_vector_iterator(const _vector_iterator<T> &copy): _vector(copy._vector), _index(copy._index) {}

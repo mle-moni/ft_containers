@@ -21,7 +21,7 @@ namespace ft
 			typedef const value_type	*const_pointer;
 			typedef ptrdiff_t			difference_type;
 			typedef	size_t				size_type;
-			typedef std::bidirectional_iterator_tag	iterator_category;
+			typedef ft::bidirectional_iterator_tag	iterator_category;
 		private:
 			typedef	tree_node<Key, T, value_compare>	_node_type;
 		public:			
