@@ -35,7 +35,7 @@ struct tree_node {
 		static tree_node	*insert(tree_node *root, tree_node *new_el)
 		{
 			Compare	comp;
-			if (root->UNIQUE_KEY && root && new_el->key_val.first == root->key_val.first)
+			if (root && root->UNIQUE_KEY && new_el->key_val.first == root->key_val.first)
 				return (root);
 			if (root && root->is_last)
 			{
@@ -45,6 +45,11 @@ struct tree_node {
 				new_el->right = root;
 				root->parent = new_el;
 				return (new_el);
+			}
+			if (root && new_el->is_last) {
+				root->right = new_el;
+				new_el->parent = root;
+				return (new_el); // xd
 			}
 			if (root && comp(new_el->key_val.first, root->key_val.first))
 			{
@@ -152,18 +157,23 @@ struct tree_node {
 					if (was_left_child)
 					{
 						node_parent->left = remove_bindings(node_parent, node_left, node_right);
-						return (node_parent->left);
+						return (get_root_node(node_parent));
 					}
 					node_parent->right = remove_bindings(node_parent, node_left, node_right);
-					return (node_parent->right);
+					return (get_root_node(node_parent));
 				}
-				return (remove_bindings(node_parent, node_left, node_right));
+				return (get_root_node(remove_bindings(node_parent, node_left, node_right)));
 			}
 			Compare comp;
-			if (comp(key, root->key_val.first))
-				return (remove(root->left, key, deletedCount));
-			else
-				return (remove(root->right, key, deletedCount));
+			if (comp(key, root->key_val.first)) {
+				if (root->left)
+					return (remove(root->left, key, deletedCount));
+				return (get_root_node(root));
+			} else {
+				if (root->right)
+					return (remove(root->right, key, deletedCount));
+				return (get_root_node(root));
+			}
 		}
 	private:
 		static tree_node	*remove_bindings(tree_node *node_parent, tree_node *node_left, tree_node *node_right)

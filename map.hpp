@@ -183,6 +183,8 @@ namespace ft
 			{
 				iterator	beg = begin();
 				_node_type	*insert_node;
+				if (position == end())
+					position = begin();
 				while (1)
 				{
 					if (position == beg)
@@ -226,14 +228,14 @@ namespace ft
 			void erase (iterator position)
 			{
 				int	removedCount = 0;
-				_node_type::remove(position.ptr, &removedCount);
+				_root = _node_type::remove(position.ptr, &removedCount);
 				if (removedCount)
 					--_size;
 			}
 			size_type erase (const key_type& k)
 			{
 				int	removedCount = 0;
-				_node_type::remove(_root, k, &removedCount);
+				_root = _node_type::remove(_root, k, &removedCount);
 				if (!removedCount)
 					return (0);
 				--_size;
