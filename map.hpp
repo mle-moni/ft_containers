@@ -20,16 +20,17 @@ namespace ft
 				friend class map;
 				protected:
 					compCompare comp;
+				public:
+					// constructors / destructor
 					value_compare_class (compCompare c) : comp(c) {}
 					value_compare_class () {}
 					value_compare_class (const value_compare_class& other): comp(other.comp) {}
-					~value_compare_class() {}
 					value_compare_class	&operator=(const value_compare_class& other)
 					{
 						comp = other.comp;
 						return (*this);
 					}
-				public:
+					~value_compare_class() {}
 					typedef	ft::pair<const Key, T>	value_type;
 					
 					typedef bool result_type;
@@ -272,7 +273,8 @@ namespace ft
 			// Observers
 			key_compare key_comp() const
 			{
-				return (_node_type::comp);
+				key_compare	comp_function;
+				return (comp_function);
 			}
 
 			value_compare value_comp() const
