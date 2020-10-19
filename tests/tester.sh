@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 if tty -s
 then
 	export NORMAL=$(tput sgr0)
